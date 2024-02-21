@@ -126,6 +126,7 @@ class HBNBCommand(cmd.Cmd):
             return
         for arg in args[1:]:
             arg_arr = arg.split("=")
+            arg_arr[1] = arg_arr[1].replace('_', ' ')
             instance_data[arg_arr[0]] = arg_arr[1]
         new_instance = HBNBCommand.classes[class_name](**instance_data)
         storage.save()
