@@ -1,6 +1,5 @@
+-- script that prepares dbs, create a user and grant users permission
 CREATE DATABASE IF NOT EXISTS hbnb_dev_db;
-
-USE hbnb_dev_db;
 
 CREATE USER IF NOT EXISTS 'hbnb_dev'@'localhost' IDENTIFIED WITH authentication_plugin BY 'hbnb_dev_pwd';
 
