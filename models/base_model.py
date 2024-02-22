@@ -5,7 +5,7 @@ from datetime import datetime
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.orm import declarative_base
 
-from FileStorage import delete
+from models.engine.file_storage import FileStorage
 
 Base = declarative_base()
 
