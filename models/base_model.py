@@ -5,6 +5,8 @@ from datetime import datetime
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.orm import declarative_base
 
+from FileStorage import delete
+
 Base = declarative_base()
 
 class BaseModel:
@@ -29,7 +31,7 @@ class BaseModel:
             self.updated_at = datetime.now()
             for key, val in kwargs.items():
                 setattr(self, key, val)
-            storage.new(self)
+            """storage.new(self)"""
         else:
             kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')
@@ -58,4 +60,10 @@ class BaseModel:
                           (str(type(self)).split('.')[-1]).split('\'')[0]})
         dictionary['created_at'] = self.created_at.isoformat()
         dictionary['updated_at'] = self.updated_at.isoformat()
+        for key in dictionary:
+            if key == '_sa_instance_state':
+                del dictionary['_sa_instance_state']
         return dictionary
+    
+    def delete(self):
+        """This is to delete an instance"""
