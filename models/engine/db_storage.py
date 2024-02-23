@@ -4,7 +4,7 @@ for the hbnb project
 """
 from models.base_model import BaseModel
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, relationship, sessionmaker, scoped_session
+from sqlalchemy.orm import declarative_base, sessionmaker, scoped_session
 import os
 
 Base = declarative_base()
