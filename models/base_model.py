@@ -11,7 +11,6 @@ Base = declarative_base()
 
 class BaseModel:
     """A base class for all hbnb models"""
-    __tablename__ = 'base_model'
     id = Column(String(60), primary_key=True)
     created_at = Column(DateTime(), nullable=False, default=datetime.utcnow())
     updated_at = Column(DateTime(), nullable=False, default=datetime.utcnow())
@@ -59,7 +58,7 @@ class BaseModel:
                           (str(type(self)).split('.')[-1]).split('\'')[0]})
         dictionary['created_at'] = self.created_at.isoformat()
         dictionary['updated_at'] = self.updated_at.isoformat()
-        for key in dictionary:
+        for key in dictionary.items():
             if key == '_sa_instance_state':
                 del dictionary['_sa_instance_state']
         return dictionary
