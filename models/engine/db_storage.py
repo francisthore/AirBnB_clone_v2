@@ -2,11 +2,12 @@
 """This is our database storage engine
 for the hbnb project
 """
-from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker, scoped_session
-import os
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
+import os
 Base = declarative_base()
+
 
 class DBStorage:
     """ Schema/Class for our db storage"""
@@ -22,24 +23,22 @@ class DBStorage:
         ENV_VAR = os.getenv('HBNB_ENV')
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
                                       format(USERNAME, PASSWORD, HOST, DATABASE), pool_pre_ping=True, echo=True)
-        Base.metadata.create_all(self.__engine)
         if ENV_VAR == 'test':
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """Perfoms query on db for all objects
         depending on cls name"""
-        if cls:
-            query_res = self.__session.query(cls).all()
-        else: 
-            query_res = self.__session.query(cls).all()
         res_dict = {}
-        i = 0
-        for item in query_res:
-            key = "{}.{}".format(item.__class__.__name__, item)
-            print(key)
-            res_dict[key] = item
-            
+        if cls:
+            if type(cls) is str:
+                cls = eval(cls)
+            query_res = self.__session.query(cls).all()
+            for item in query_res:
+                if hasattr(item, 'id'):
+                    key = "{}.{}".format(item.__class__.__name__, item.id)
+                    print(key)
+                    res_dict[key] = item            
         return res_dict
     
     def new(self, obj):
@@ -57,11 +56,7 @@ class DBStorage:
     
     def reload(self):
         """Creates all tables in the db"""
-
         Base.metadata.create_all(self.__engine)
         session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
-        
-
-
