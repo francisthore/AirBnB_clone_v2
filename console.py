@@ -129,7 +129,7 @@ class HBNBCommand(cmd.Cmd):
             arg_arr[1] = arg_arr[1].replace('_', ' ')
             instance_data[arg_arr[0]] = arg_arr[1]
         new_instance = HBNBCommand.classes[class_name](**instance_data)
-        storage.save()
+        storage.new(new_instance)
         print(new_instance.id)
         storage.save()
 
@@ -213,11 +213,11 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all().items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all().items():
                 print_list.append(str(v))
 
         print(print_list)
@@ -226,6 +226,9 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the all command """
         print("Shows all objects, or all of a class")
         print("[Usage]: all <className>\n")
+
+    def do_sto(self, args):
+        print(type(storage))
 
     def do_count(self, args):
         """Count current number of class instances"""
