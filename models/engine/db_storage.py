@@ -40,7 +40,7 @@ class DBStorage:
                 if hasattr(item, 'id'):
                     key = "{}.{}".format(item.__class__.__name__, item.id)
                     print(key)
-                    res_dict[key] = item            
+                    res_dict[key] = item
         return res_dict
     
     def new(self, obj):
