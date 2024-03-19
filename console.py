@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """ Console Module """
-from models.base_model import BaseModel
 from models.state import State
 from models.city import City
 import cmd
@@ -14,7 +13,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
-               'BaseModel': BaseModel, 'State': State, 'City': City               
+               'State': State, 'City': City               
               }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
@@ -220,8 +219,9 @@ class HBNBCommand(cmd.Cmd):
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in storage.all().items():
-                print_list.append(str(v))
+            for class_name in HBNBCommand.classes:
+                for k, v in storage.all(HBNBCommand.classes[class_name]).items():
+                    print_list.append(str(v))           
 
         print(print_list)
 
