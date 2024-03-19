@@ -109,17 +109,24 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, args):
         """ Create an object of any class"""
         from models.__init__ import storage
-        instance_data = {}
-        args = args.split(' ')
-        class_name = args[0]
-        if class_name not in HBNBCommand.classes:
+        try:
+            if not args:
+                raise SyntaxError()
+            instance_data = {}
+            args = args.split(' ')
+            if args[0] not in HBNBCommand.classes:
+                raise NameError()
+            for arg in args[1:]:
+                arg_arr = arg.split("=")
+                arg_arr[1] =  eval(arg_arr[1])
+                if (type(arg_arr[1]) is str):
+                    arg_arr[1] = arg_arr[1].replace('_', ' ').replace('"', '\\"')
+                instance_data[arg_arr[0]] = arg_arr[1]
+        except SyntaxError:
+            print("** class name missing **")
+        except NameError:
             print("** class doesn't exist **")
-            return
-        for arg in args[1:]:
-            arg_arr = arg.split("=")
-            arg_arr[1] = arg_arr[1].replace('_', ' ')
-            instance_data[arg_arr[0]] = arg_arr[1]
-        new_instance = HBNBCommand.classes[class_name](**instance_data)
+        new_instance = HBNBCommand.classes[args[0]](**instance_data)
         new_instance.save()
         print(new_instance.id)
         storage.save()
@@ -153,8 +160,10 @@ class HBNBCommand(cmd.Cmd):
             return
 
         key = c_name + "." + c_id
+        print(key)
         try:
-            print(storage._FileStorage__objects[key])
+            instance = storage.all(c_name)
+            print(instance[key])
         except KeyError:
             print("** no instance found **")
 
