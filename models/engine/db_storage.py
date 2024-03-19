@@ -2,11 +2,13 @@
 """This is our database storage engine
 for the hbnb project
 """
-
+from models.base_model import Base
+from models.state import State
+from models.city import City
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session, declarative_base
+from sqlalchemy.orm import sessionmaker, scoped_session
 import os
-Base = declarative_base()
+
 
 
 class DBStorage:

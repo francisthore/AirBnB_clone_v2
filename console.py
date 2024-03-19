@@ -1,15 +1,10 @@
 #!/usr/bin/python3
 """ Console Module """
-import cmd
-import sys
 from models.base_model import BaseModel
-from models.__init__ import storage
-from models.user import User
-from models.place import Place
 from models.state import State
 from models.city import City
-from models.amenity import Amenity
-from models.review import Review
+import cmd
+import sys
 
 
 class HBNBCommand(cmd.Cmd):
@@ -19,9 +14,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
-               'BaseModel': BaseModel, 'User': User, 'Place': Place,
-               'State': State, 'City': City, 'Amenity': Amenity,
-               'Review': Review
+               'BaseModel': BaseModel, 'State': State, 'City': City               
               }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
@@ -73,7 +66,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is '}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -115,6 +108,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
+        from models.__init__ import storage
         instance_data = {}
         args = args.split(' ')
         class_name = args[0]
@@ -137,6 +131,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, args):
         """ Method to show an individual object """
+        from models.__init__ import storage
         new = args.partition(" ")
         c_name = new[0]
         c_id = new[2]
@@ -170,6 +165,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, args):
         """ Destroys a specified object """
+        from models.__init__ import storage
         new = args.partition(" ")
         c_name = new[0]
         c_id = new[2]
@@ -203,6 +199,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
+        from models.__init__ import storage
         print_list = []
 
         if args:
@@ -225,10 +222,12 @@ class HBNBCommand(cmd.Cmd):
         print("[Usage]: all <className>\n")
 
     def do_sto(self, args):
+        from models.__init__ import storage
         print(type(storage))
 
     def do_count(self, args):
         """Count current number of class instances"""
+        from models.__init__ import storage
         count = 0
         for k, v in storage._FileStorage__objects.items():
             if args == k.split('.')[0]:
@@ -241,6 +240,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, args):
         """ Updates a certain object with new info """
+        from models.__init__ import storage
         c_name = c_id = att_name = att_val = kwargs = ''
 
         # isolate cls from id/args, ex: (<cls>, delim, <id/args>)
@@ -279,7 +279,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -287,10 +287,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
