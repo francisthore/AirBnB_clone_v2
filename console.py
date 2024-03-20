@@ -14,7 +14,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
-               'BaseModel': BaseModel, 'State': State, 'City': City               
+               'BaseModel': BaseModel, 'State': State, 'City': City
               }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
@@ -118,9 +118,10 @@ class HBNBCommand(cmd.Cmd):
                 raise NameError()
             for arg in args[1:]:
                 arg_arr = arg.split("=")
-                arg_arr[1] =  eval(arg_arr[1])
+                arg_arr[1] = eval(arg_arr[1])
                 if (type(arg_arr[1]) is str):
-                    arg_arr[1] = arg_arr[1].replace('_', ' ').replace('"', '\\"')
+                    arg_arr[1] = arg_arr[1].replace('_', ' ')
+                    arg_arr[1] = arg_arr[1].replace('"', '\\"')
                 instance_data[arg_arr[0]] = arg_arr[1]
         except SyntaxError:
             print("** class name missing **")
