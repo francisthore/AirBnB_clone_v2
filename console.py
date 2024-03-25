@@ -2,6 +2,7 @@
 """ Console Module """
 from models.state import State
 from models.city import City
+from models.user import User
 import cmd
 import sys
 
@@ -210,20 +211,18 @@ class HBNBCommand(cmd.Cmd):
         """ Shows all objects, or all objects of a class"""
         from models.__init__ import storage
         print_list = []
-
         if args:
-            args = args.split(' ')[0]  # remove possible trailing args
+            args = args.split(' ')[0]
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage.all(HBNBCommand.classes[args]).items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+            for key, val in storage.all(HBNBCommand.classes[args]).items():
+                if key.split('.')[0] == args:
+                    print_list.append(val.__str__())
         else:
-            for class_name in HBNBCommand.classes:
-                for k, v in storage.all(HBNBCommand.classes[class_name]).items():
-                    print_list.append(str(v))           
-
+            for cls in HBNBCommand.classes:
+                for key, val in storage.all(HBNBCommand.classes[cls]).items():
+                    print_list.append(val.__str__())
         print(print_list)
 
     def help_all(self):

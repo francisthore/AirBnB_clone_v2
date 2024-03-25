@@ -5,6 +5,7 @@ for the hbnb project
 from models.base_model import Base
 from models.state import State
 from models.city import City
+from models.user import User
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 import os
@@ -38,8 +39,7 @@ class DBStorage:
             query_res = self.__session.query(cls).all()
             for item in query_res:
                 if hasattr(item, 'id'):
-                    key = "{}.{}".format(item.__class__.__name__, item.id)
-                    print(key)
+                    key = "{}.{}".format(item.__class__.__name__, item.id)                    
                     res_dict[key] = item
         return res_dict
     
