@@ -2,6 +2,7 @@
 """ Console Module """
 from models.state import State
 from models.city import City
+from models.user import User
 import cmd
 import sys
 
@@ -13,7 +14,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
-               'State': State, 'City': City               
+               'State': State, 'City': City, 'User': User
               }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
@@ -117,9 +118,10 @@ class HBNBCommand(cmd.Cmd):
                 raise NameError()
             for arg in args[1:]:
                 arg_arr = arg.split("=")
-                arg_arr[1] =  eval(arg_arr[1])
+                arg_arr[1] = eval(arg_arr[1])
                 if (type(arg_arr[1]) is str):
-                    arg_arr[1] = arg_arr[1].replace('_', ' ').replace('"', '\\"')
+                    arg_arr[1] = arg_arr[1].replace('_', ' ').replace('"',
+                                                                      '\\"')
                 instance_data[arg_arr[0]] = arg_arr[1]
         except SyntaxError:
             print("** class name missing **")
@@ -209,20 +211,18 @@ class HBNBCommand(cmd.Cmd):
         """ Shows all objects, or all objects of a class"""
         from models.__init__ import storage
         print_list = []
-
         if args:
-            args = args.split(' ')[0]  # remove possible trailing args
+            args = args.split(' ')[0]
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage.all(HBNBCommand.classes[args]).items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+            for key, val in storage.all(HBNBCommand.classes[args]).items():
+                if key.split('.')[0] == args:
+                    print_list.append(val.__str__())
         else:
-            for class_name in HBNBCommand.classes:
-                for k, v in storage.all(HBNBCommand.classes[class_name]).items():
-                    print_list.append(str(v))           
-
+            for cls in HBNBCommand.classes:
+                for key, val in storage.all(HBNBCommand.classes[cls]).items():
+                    print_list.append(val.__str__())
         print(print_list)
 
     def help_all(self):
