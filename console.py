@@ -14,7 +14,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
-               'BaseModel': BaseModel, 'State': State, 'City': City
+               'State': State, 'City': City, 'User': User
               }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
@@ -161,7 +161,6 @@ class HBNBCommand(cmd.Cmd):
             return
 
         key = c_name + "." + c_id
-        print(key)
         try:
             instance = storage.all(c_name)
             print(instance[key])
