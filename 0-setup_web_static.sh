@@ -12,7 +12,7 @@ echo "<html>
     Holberton School
   </body>
 </html> " > /data/web_static/releases/test/index.html
-ln -sf /data/web_static/releases/test/ /data/web_static/current
+ln -sf /data/web_static/releases/test /data/web_static/current
 chown -R ubuntu:ubuntu /data/
 echo "
 events { }
@@ -28,6 +28,7 @@ http {
 
         location /hbnb_static {
             alias /data/web_static/current/;
+	    try_files $uri $uri/ /custom_404.html;
         }
 
     	location /redirect_me {
