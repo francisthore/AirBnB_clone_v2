@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # sets up server for deploying webstatic
+apt-get install nginx -y
+mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
 mkdir -p /data/
 mkdir -p /data/web_static/
 mkdir -p /data/web_static/releases/
