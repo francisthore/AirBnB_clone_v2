@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 # sets up server for deploying webstatic
 mkdir -p /data/
 mkdir -p /data/web_static/
