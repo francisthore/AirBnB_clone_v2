@@ -5,6 +5,7 @@ for the hbnb project
 from models.base_model import Base
 from models.state import State
 from models.city import City
+from models.user import User
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 import os
@@ -24,7 +25,7 @@ class DBStorage:
         HOST = os.getenv('HBNB_MYSQL_HOST')
         ENV_VAR = os.getenv('HBNB_ENV')
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
-                                      format(USERNAME, PASSWORD, HOST, DATABASE), pool_pre_ping=True, echo=True)
+                                      format(USERNAME, PASSWORD, HOST, DATABASE), pool_pre_ping=True)
         if ENV_VAR == 'test':
             Base.metadata.drop_all(self.__engine)
 
@@ -38,9 +39,8 @@ class DBStorage:
             query_res = self.__session.query(cls).all()
             for item in query_res:
                 if hasattr(item, 'id'):
-                    key = "{}.{}".format(item.__class__.__name__, item.id)
-                    print(key)
-                    res_dict[key] = item            
+                    key = "{}.{}".format(item.__class__.__name__, item.id)                    
+                    res_dict[key] = item
         return res_dict
     
     def new(self, obj):

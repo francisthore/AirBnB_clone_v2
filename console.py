@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """ Console Module """
-from models.base_model import BaseModel
 from models.state import State
 from models.city import City
+from models.user import User
 import cmd
 import sys
 
@@ -14,7 +14,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
-               'BaseModel': BaseModel, 'State': State, 'City': City               
+               'State': State, 'City': City, 'User': User
               }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
@@ -109,17 +109,25 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, args):
         """ Create an object of any class"""
         from models.__init__ import storage
-        instance_data = {}
-        args = args.split(' ')
-        class_name = args[0]
-        if class_name not in HBNBCommand.classes:
+        try:
+            if not args:
+                raise SyntaxError()
+            instance_data = {}
+            args = args.split(' ')
+            if args[0] not in HBNBCommand.classes:
+                raise NameError()
+            for arg in args[1:]:
+                arg_arr = arg.split("=")
+                arg_arr[1] = eval(arg_arr[1])
+                if (type(arg_arr[1]) is str):
+                    arg_arr[1] = arg_arr[1].replace('_', ' ').replace('"',
+                                                                      '\\"')
+                instance_data[arg_arr[0]] = arg_arr[1]
+        except SyntaxError:
+            print("** class name missing **")
+        except NameError:
             print("** class doesn't exist **")
-            return
-        for arg in args[1:]:
-            arg_arr = arg.split("=")
-            arg_arr[1] = arg_arr[1].replace('_', ' ')
-            instance_data[arg_arr[0]] = arg_arr[1]
-        new_instance = HBNBCommand.classes[class_name](**instance_data)
+        new_instance = HBNBCommand.classes[args[0]](**instance_data)
         new_instance.save()
         print(new_instance.id)
         storage.save()
@@ -153,8 +161,10 @@ class HBNBCommand(cmd.Cmd):
             return
 
         key = c_name + "." + c_id
+        print(key)
         try:
-            print(storage._FileStorage__objects[key])
+            instance = storage.all(c_name)
+            print(instance[key])
         except KeyError:
             print("** no instance found **")
 
@@ -201,19 +211,18 @@ class HBNBCommand(cmd.Cmd):
         """ Shows all objects, or all objects of a class"""
         from models.__init__ import storage
         print_list = []
-
         if args:
-            args = args.split(' ')[0]  # remove possible trailing args
+            args = args.split(' ')[0]
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage.all(HBNBCommand.classes[args]).items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+            for key, val in storage.all(HBNBCommand.classes[args]).items():
+                if key.split('.')[0] == args:
+                    print_list.append(val.__str__())
         else:
-            for k, v in storage.all().items():
-                print_list.append(str(v))
-
+            for cls in HBNBCommand.classes:
+                for key, val in storage.all(HBNBCommand.classes[cls]).items():
+                    print_list.append(val.__str__())
         print(print_list)
 
     def help_all(self):
