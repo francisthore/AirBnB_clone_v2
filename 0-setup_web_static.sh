@@ -28,7 +28,6 @@ http {
 
         location /hbnb_static {
             alias /data/web_static/current/;
-	    try_files $uri $uri/ /custom_404.html;
         }
 
     	location /redirect_me {
