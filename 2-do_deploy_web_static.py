@@ -13,14 +13,17 @@ def do_deploy(archive_path):
         return False
     try:
         archive = os.path.basename(archive_path).split('.')[0]
+        dest_path = "/data/web_static/releases/{}/".format(archive)
         put(archive_path, "/tmp/")
-        run("mkdir -p /data/web_static/releases/{}/".format(archive))
-        run("tar -xzf /tmp/{}.tgz -C /data/web_static/releases/{}/".format(archive, archive))
+        run("mkdir -p {}".format(dest_path))
+        run("tar -xzf /tmp/{}.tgz -C {}".format(archive, dest_path))
         run("rm /tmp/{}.tgz".format(archive))
-        run("mv /data/web_static/releases/{}/web_static/* /data/web_static/releases/{}/".format(archive, archive))
-        run("rm -rf /data/web_static/releases/{}/web_static".format(archive))
+        run("mv {}web_static/* {}".format(dest_path, dest_path))
+        run("rm -rf {}web_static".format(dest_path))
         run("rm -rf /data/web_static/current")
-        run("ln -s /data/web_static/releases/{}/ /data/web_static/current".format(archive))
+        run("ln -s {} /data/web_static/current".format(dest_path))
+        print("New version deployed!")
         return True
-    except:
+    except Exception as e:
         return False
+
