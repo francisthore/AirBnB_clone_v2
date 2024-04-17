@@ -4,6 +4,8 @@ Project"""
 
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from sqlalchemy.orm import relationship
+from models.review import Review
 
 
 class Place(BaseModel, Base):
@@ -20,3 +22,12 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, default=0, nullable=False)
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
+    reviews = relationship("Review", backref='place',
+                           cascade="all, delete, delete-orphan")
+
+    @property
+    def reviews(self):
+        """Getter for reviews"""
+        from models import storage
+        return [review for review in storage.all(Review).values()
+                if review.place_id == self.id]
