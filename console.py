@@ -3,6 +3,7 @@
 from models.state import State
 from models.city import City
 from models.user import User
+from models.place import Place
 import cmd
 import sys
 
@@ -14,7 +15,8 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
-               'State': State, 'City': City, 'User': User
+               'State': State, 'City': City, 'User': User,
+               'Place': Place
               }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {

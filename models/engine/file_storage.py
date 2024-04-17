@@ -2,6 +2,7 @@
 """This module defines a class to manage file storage for hbnb clone"""
 import json
 
+
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
     __file_path = 'file.json'
@@ -33,13 +34,12 @@ class FileStorage:
             json.dump(temp, f)
 
     def reload(self):
-        """Loads storage dictionary from file"""        
+        """Loads storage dictionary from file"""
         from models.base_model import BaseModel
         from models.state import State
         from models.city import City
         from models.user import User
-     
-    
+
         classes = {
                     'BaseModel': BaseModel,
                     'State': State, 'City': City, 'User': User
