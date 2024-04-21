@@ -6,6 +6,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey, Integer, Float
 from sqlalchemy.orm import relationship
 from models.review import Review
+from os import getenv
 
 
 class Place(BaseModel, Base):
@@ -25,9 +26,10 @@ class Place(BaseModel, Base):
     reviews = relationship("Review", backref='place',
                            cascade="all, delete, delete-orphan")
 
-    @property
-    def reviews(self):
-        """Getter for reviews"""
-        from models import storage
-        return [review for review in storage.all(Review).values()
-                if review.place_id == self.id]
+    if getenv('HBNB_TYPE_STORAGE') != 'db':
+        @property
+        def reviews(self):
+            """Getter for reviews"""
+            from models import storage
+            return [review for review in storage.all(Review).values()
+                    if review.place_id == self.id]
