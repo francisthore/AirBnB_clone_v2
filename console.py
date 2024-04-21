@@ -112,10 +112,6 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, args):
         """ Create an object of any class"""
         from models.__init__ import storage
-        print("=================")
-        print("Create command called")
-        print("---> {}".format(args))
-        print("=============")
         try:
             if not args:
                 raise SyntaxError()
