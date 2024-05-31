@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash 
 # Does needed setup to deploying web static stuff
 apt-get install nginx -y
 mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
