@@ -17,7 +17,7 @@ def close_storage(e):
 @app.route('/states_list', strict_slashes=False)
 def list_states():
     """Makes db query and returns dict of states"""
-    states = [state for state in storage.all(State).values()]
+    states = sorted(storage.all(State).values(), key=lambda state: state.name)
     return render_template('7-states_list.html', states=states)
 
 
