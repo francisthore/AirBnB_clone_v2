@@ -16,7 +16,7 @@ def states_list():
 
 
 @app.teardown_appcontext
-def close_storage(e):
+def teardown_db(exception):
     """closes storage instance"""
     storage.close()
 
