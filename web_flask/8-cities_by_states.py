@@ -14,11 +14,11 @@ def close_storage(e):
     storage.close()
 
 
-@app.route('/states_list', strict_slashes=False)
-def states_list():
-    """Makes db query and returns dict of states"""
+@app.route('/cities_by_states', strict_slashes=False)
+def cities_by_states():
+    """Lists cities grouped by states"""
     states = sorted(storage.all(State).values(), key=lambda state: state.name)
-    return render_template('7-states_list.html', states=states)
+    return render_template('8-cities_by_states.html', states=states)
 
 
 if __name__ == '__main__':
