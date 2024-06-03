@@ -11,8 +11,13 @@ app = Flask(__name__)
 @app.route('/states_list', strict_slashes=False)
 def states_list():
     """Makes db query and returns dict of states"""
-    states = storage.all(State)
-    return render_template('7-states_list.html', states=states)
+    states_l = []
+    for state in sorted(storage.all(State).values(),
+                        key=lambda state: state.name):
+        states_t = state.id, state.name
+        states_l.append(states_t)
+
+    return render_template('7-states_list.html', states=states_l)
 
 
 @app.teardown_appcontext
