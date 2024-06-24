@@ -17,7 +17,7 @@ def close_storage(e):
 @app.route('/cities_by_states', strict_slashes=False)
 def cities_by_states():
     """Lists cities grouped by states"""
-    states = sorted(storage.all(State).values(), key=lambda state: state.name)
+    states = storage.all(State)
     return render_template('8-cities_by_states.html', states=states)
 
 
