@@ -6,14 +6,8 @@ from flask import Flask
 app = Flask(__name__)
 
 
-@app.route('/', strict_slashes=False)
-def hello_route():
-    """Root route"""
-    return 'Hello HBNB!'
-
-
 @app.route('/airbnb-onepage', strict_slashes=False)
-def airbnb():
+def hello_route():
     """Another route"""
     return 'Hellow HBNB!'
 
